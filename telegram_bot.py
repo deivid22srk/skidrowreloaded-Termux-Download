@@ -134,110 +134,110 @@ def download_with_transmission(link: str, download_path: str) -> tuple[bool, str
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Comando /start"""
     welcome_text = """
-🎮 **BEM-VINDO AO SKIDROW DOWNLOADER BOT!**
+🎮 <b>BEM-VINDO AO SKIDROW DOWNLOADER BOT!</b>
 
 Busque e baixe jogos do Skidrow Reloaded diretamente no Telegram!
 
-**📋 Comandos disponíveis:**
+<b>📋 Comandos disponíveis:</b>
 
-/buscar <nome do jogo> - Buscar jogos
-/caminho <caminho> - Definir caminho de download
+/buscar &lt;nome do jogo&gt; - Buscar jogos
+/caminho &lt;caminho&gt; - Definir caminho de download
 /caminho_ver - Ver caminho atual
 /ajuda - Mostrar ajuda
 /sobre - Sobre o bot
 
-**🎯 Exemplo:**
-`/buscar GTA V`
+<b>🎯 Exemplo:</b>
+/buscar GTA V
 
-**📁 Caminho padrão:**
-`/data/data/com.termux/files/home/storage/downloads`
+<b>📁 Caminho padrão:</b>
+/data/data/com.termux/files/home/storage/downloads
 
-⚠️ **Importante:** Use apenas para fins legais!
+⚠️ <b>Importante:</b> Use apenas para fins legais!
 """
     
     await update.message.reply_text(
         welcome_text,
-        parse_mode='Markdown'
+        parse_mode='HTML'
     )
 
 
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Comando /ajuda"""
     help_text = """
-📖 **AJUDA - COMO USAR**
+📖 <b>AJUDA - COMO USAR</b>
 
-**1️⃣ Buscar Jogos:**
-`/buscar <nome do jogo>`
+<b>1️⃣ Buscar Jogos:</b>
+/buscar &lt;nome do jogo&gt;
 
-Exemplo: `/buscar GTA V`
+Exemplo: /buscar GTA V
 
-**2️⃣ Definir Caminho:**
-`/caminho /seu/caminho/aqui`
+<b>2️⃣ Definir Caminho:</b>
+/caminho /seu/caminho/aqui
 
-Exemplo: `/caminho /storage/emulated/0/Download`
+Exemplo: /caminho /storage/emulated/0/Download
 
-**3️⃣ Ver Caminho Atual:**
-`/caminho_ver`
+<b>3️⃣ Ver Caminho Atual:</b>
+/caminho_ver
 
-**4️⃣ Fluxo Completo:**
+<b>4️⃣ Fluxo Completo:</b>
 
 1. Defina o caminho (opcional)
-2. Busque um jogo com `/buscar`
+2. Busque um jogo com /buscar
 3. Clique no jogo desejado
 4. Escolha o link de download
 5. Confirme o download
 
-**🔧 Comandos do Transmission:**
+<b>🔧 Comandos do Transmission:</b>
 (No Termux)
 
-• `transmission-remote -l` - Ver downloads
-• `transmission-remote -t 1 -S` - Pausar
-• `transmission-remote -t 1 -s` - Retomar
+• transmission-remote -l - Ver downloads
+• transmission-remote -t 1 -S - Pausar
+• transmission-remote -t 1 -s - Retomar
 
-⚠️ **Nota:** Certifique-se que o Transmission está instalado no Termux!
+⚠️ <b>Nota:</b> Certifique-se que o Transmission está instalado no Termux!
 """
     
     await update.message.reply_text(
         help_text,
-        parse_mode='Markdown'
+        parse_mode='HTML'
     )
 
 
 async def about_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Comando /sobre"""
     about_text = """
-ℹ️ **SOBRE O BOT**
+ℹ️ <b>SOBRE O BOT</b>
 
-**Nome:** Skidrow Downloader Bot
-**Versão:** 1.0.0
-**Desenvolvido para:** Termux + Telegram
+<b>Nome:</b> Skidrow Downloader Bot
+<b>Versão:</b> 1.0.0
+<b>Desenvolvido para:</b> Termux + Telegram
 
-**Funcionalidades:**
+<b>Funcionalidades:</b>
 ✅ Busca de jogos no Skidrow Reloaded
 ✅ Listagem interativa com botões
 ✅ Download via Transmission
 ✅ Configuração de caminho
 ✅ Interface completa no Telegram
 
-**Tecnologias:**
+<b>Tecnologias:</b>
 • Python 3.10+
 • python-telegram-bot
 • BeautifulSoup4
 • Requests
 • Transmission
 
-**⚠️ Aviso Legal:**
+⚠️ <b>Aviso Legal:</b>
 Este bot é apenas para fins educacionais.
 Use apenas para jogos que você possui legalmente.
 
-**📞 Suporte:**
+<b>📞 Suporte:</b>
 Reddit: r/termux
 GitHub: termux/termux-app
 """
     
     await update.message.reply_text(
         about_text,
-        parse_mode='Markdown'
+        parse_mode='HTML'
     )
 
 
@@ -247,9 +247,8 @@ async def set_path(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
     if not context.args:
         await update.message.reply_text(
-            "❌ Uso correto: `/caminho /seu/caminho`\n\n"
-            "Exemplo: `/caminho /storage/emulated/0/Download`",
-            parse_mode='Markdown'
+            "❌ Uso correto: /caminho /seu/caminho\n\n"
+            "Exemplo: /caminho /storage/emulated/0/Download"
         )
         return
     
@@ -272,9 +271,9 @@ async def set_path(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_data_storage[user_id]['download_path'] = path
     
     await update.message.reply_text(
-        f"✅ Caminho definido!\n\n📁 `{path}`\n\n"
-        f"Agora você pode buscar jogos com `/buscar <nome>`",
-        parse_mode='Markdown'
+        f"✅ Caminho definido!\n\n📁 {path}\n\n"
+        f"Agora você pode buscar jogos com /buscar &lt;nome&gt;",
+        parse_mode='HTML'
     )
 
 
@@ -286,9 +285,9 @@ async def view_path(update: Update, context: ContextTypes.DEFAULT_TYPE):
     current_path = user_data_storage.get(user_id, {}).get('download_path', default_path)
     
     await update.message.reply_text(
-        f"📁 **Caminho Atual:**\n\n`{current_path}`\n\n"
-        f"Para mudar, use: `/caminho /novo/caminho`",
-        parse_mode='Markdown'
+        f"📁 <b>Caminho Atual:</b>\n\n{current_path}\n\n"
+        f"Para mudar, use: /caminho /novo/caminho",
+        parse_mode='HTML'
     )
 
 
@@ -298,9 +297,9 @@ async def search_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
     if not context.args:
         await update.message.reply_text(
-            "❌ Uso correto: `/buscar <nome do jogo>`\n\n"
-            "Exemplo: `/buscar GTA V`",
-            parse_mode='Markdown'
+            "❌ Uso correto: /buscar &lt;nome do jogo&gt;\n\n"
+            "Exemplo: /buscar GTA V",
+            parse_mode='HTML'
         )
         return
     
@@ -308,9 +307,9 @@ async def search_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
     # Enviar mensagem de busca
     search_msg = await update.message.reply_text(
-        f"🔍 Buscando por: **{query}**\n\n"
+        f"🔍 Buscando por: <b>{query}</b>\n\n"
         f"⏳ Aguarde...",
-        parse_mode='Markdown'
+        parse_mode='HTML'
     )
     
     # Buscar jogos
@@ -344,10 +343,10 @@ async def search_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     reply_markup = InlineKeyboardMarkup(keyboard)
     
     await search_msg.edit_text(
-        f"📋 **Resultados da Busca**\n\n"
-        f"Encontrados: **{len(results)} jogos**\n\n"
+        f"📋 <b>Resultados da Busca</b>\n\n"
+        f"Encontrados: <b>{len(results)} jogos</b>\n\n"
         f"Selecione um jogo:",
-        parse_mode='Markdown',
+        parse_mode='HTML',
         reply_markup=reply_markup
     )
 
@@ -378,20 +377,20 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
         
         # Buscar links
         await query.edit_message_text(
-            f"🎮 **{selected_game['title']}**\n\n"
+            f"🎮 <b>{selected_game['title']}</b>\n\n"
             f"📅 {selected_game['date']}\n\n"
             f"🔗 {selected_game['url']}\n\n"
             f"🔄 Buscando links de download...",
-            parse_mode='Markdown'
+            parse_mode='HTML'
         )
         
         links = get_download_links(selected_game['url'])
         
         if not links['torrent'] and not links['magnet']:
             await query.edit_message_text(
-                f"🎮 **{selected_game['title']}**\n\n"
+                f"🎮 <b>{selected_game['title']}</b>\n\n"
                 f"❌ Nenhum link de download encontrado!",
-                parse_mode='Markdown'
+                parse_mode='HTML'
             )
             return
         
@@ -426,13 +425,13 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
         reply_markup = InlineKeyboardMarkup(keyboard)
         
         await query.edit_message_text(
-            f"🎮 **{selected_game['title']}**\n\n"
+            f"🎮 <b>{selected_game['title']}</b>\n\n"
             f"📅 {selected_game['date']}\n\n"
             f"✅ Links encontrados:\n"
             f"🧲 Torrents: {len(links['torrent'])}\n"
             f"🔗 Magnets: {len(links['magnet'])}\n\n"
             f"Selecione um link:",
-            parse_mode='Markdown',
+            parse_mode='HTML',
             reply_markup=reply_markup
         )
     
@@ -466,13 +465,13 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
         link_preview = selected_link[:80] + "..." if len(selected_link) > 80 else selected_link
         
         await query.edit_message_text(
-            f"💾 **CONFIRMAR DOWNLOAD**\n\n"
+            f"💾 <b>CONFIRMAR DOWNLOAD</b>\n\n"
             f"🔗 Tipo: {link_type}\n"
-            f"📁 Caminho: `{current_path}`\n\n"
-            f"Link: `{link_preview}`\n\n"
+            f"📁 Caminho: {current_path}\n\n"
+            f"Link: {link_preview}\n\n"
             f"⚠️ O download será iniciado no Termux via Transmission.\n\n"
             f"Deseja continuar?",
-            parse_mode='Markdown',
+            parse_mode='HTML',
             reply_markup=reply_markup
         )
     
@@ -490,19 +489,18 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
         # Verificar transmission
         if not check_transmission():
             await query.edit_message_text(
-                "❌ **Transmission não está instalado!**\n\n"
+                "❌ <b>Transmission não está instalado!</b>\n\n"
                 "Instale no Termux:\n"
-                "`pkg install transmission`\n\n"
+                "pkg install transmission\n\n"
                 "Depois inicie o daemon:\n"
-                "`transmission-daemon`",
-                parse_mode='Markdown'
+                "transmission-daemon",
+                parse_mode='HTML'
             )
             return
         
         # Iniciar download
         await query.edit_message_text(
-            "⏳ Iniciando download...",
-            parse_mode='Markdown'
+            "⏳ Iniciando download..."
         )
         
         success, message = download_with_transmission(selected_link, download_path)
@@ -511,30 +509,30 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
             game_title = user_data_storage.get(user_id, {}).get('selected_game', {}).get('title', 'Jogo')
             
             await query.edit_message_text(
-                f"🎮 **{game_title}**\n\n"
+                f"🎮 <b>{game_title}</b>\n\n"
                 f"{message}\n\n"
-                f"📊 **Ver progresso no Termux:**\n"
-                f"`transmission-remote -l`\n\n"
-                f"⏸️ **Pausar:**\n"
-                f"`transmission-remote -t 1 -S`\n\n"
-                f"▶️ **Retomar:**\n"
-                f"`transmission-remote -t 1 -s`\n\n"
-                f"🎉 Buscar outro jogo: `/buscar <nome>`",
-                parse_mode='Markdown'
+                f"📊 <b>Ver progresso no Termux:</b>\n"
+                f"transmission-remote -l\n\n"
+                f"⏸️ <b>Pausar:</b>\n"
+                f"transmission-remote -t 1 -S\n\n"
+                f"▶️ <b>Retomar:</b>\n"
+                f"transmission-remote -t 1 -s\n\n"
+                f"🎉 Buscar outro jogo: /buscar &lt;nome&gt;",
+                parse_mode='HTML'
             )
         else:
             await query.edit_message_text(
-                f"❌ **Erro ao iniciar download**\n\n"
+                f"❌ <b>Erro ao iniciar download</b>\n\n"
                 f"{message}",
-                parse_mode='Markdown'
+                parse_mode='HTML'
             )
     
     # Cancelar download
     elif data == 'cancel_download':
         await query.edit_message_text(
             "❌ Download cancelado.\n\n"
-            "Busque novamente com `/buscar <nome>`",
-            parse_mode='Markdown'
+            "Busque novamente com /buscar &lt;nome&gt;",
+            parse_mode='HTML'
         )
 
 
@@ -544,9 +542,9 @@ async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
     await update.message.reply_text(
         f"❓ Não entendi '{text}'\n\n"
-        f"Use `/buscar <nome do jogo>` para buscar.\n"
-        f"Ou `/ajuda` para ver todos os comandos.",
-        parse_mode='Markdown'
+        f"Use /buscar &lt;nome do jogo&gt; para buscar.\n"
+        f"Ou /ajuda para ver todos os comandos.",
+        parse_mode='HTML'
     )
 
 
