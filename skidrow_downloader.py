@@ -76,7 +76,7 @@ class SearchScreen(Screen):
     """
     
     def compose(self) -> ComposeResult:
-        yield Header(show_clock=True)
+        yield Header()
         with Container(id="search_container"):
             yield Static("🎮 SKIDROW GAME DOWNLOADER", id="title")
             yield Static("Busque seus jogos favoritos", id="subtitle")
@@ -187,7 +187,7 @@ class ResultsScreen(Screen):
     results: reactive[List[Dict]] = reactive([], recompose=True)
     
     def compose(self) -> ComposeResult:
-        yield Header(show_clock=True)
+        yield Header()
         
         with Container(id="results_header"):
             yield Static("📋 Resultados da Busca", id="results_title")
@@ -355,7 +355,7 @@ class DetailsScreen(Screen):
     magnet_links: List[str] = []
     
     def compose(self) -> ComposeResult:
-        yield Header(show_clock=True)
+        yield Header()
         
         with ScrollableContainer(id="details_container"):
             game = self.app.selected_game
@@ -503,7 +503,7 @@ class DownloadScreen(Screen):
     ]
     
     def compose(self) -> ComposeResult:
-        yield Header(show_clock=True)
+        yield Header()
         
         with ScrollableContainer():
             with Container(id="download_container"):
