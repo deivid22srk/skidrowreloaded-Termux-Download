@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "🎮 Instalando Skidrow Game Downloader para Termux..."
+echo "🤖 Instalando Skidrow Telegram Bot para Termux..."
 echo ""
 
 echo "📦 Atualizando pacotes do Termux..."
@@ -22,21 +22,26 @@ termux-setup-storage
 echo ""
 echo "📚 Instalando dependências Python..."
 pip install --upgrade pip
-pip install -r requirements.txt
+pip install -r requirements_bot.txt
 
 echo ""
 echo "🔧 Configurando permissões de execução..."
-chmod +x skidrow_downloader.py
+chmod +x telegram_bot.py
+
+echo ""
+echo "🔥 Iniciando daemon do Transmission..."
+transmission-daemon
 
 echo ""
 echo "✅ Instalação concluída!"
 echo ""
-echo "🚀 Para executar o aplicativo, use:"
-echo "   python skidrow_downloader.py"
+echo "🚀 Para iniciar o bot, use:"
+echo "   python telegram_bot.py"
 echo ""
 echo "   ou"
 echo ""
-echo "   ./skidrow_downloader.py"
+echo "   ./telegram_bot.py"
 echo ""
-echo "📖 Leia o README.md para mais informações!"
+echo "⚠️  IMPORTANTE: Mantenha o Termux aberto enquanto o bot estiver rodando!"
+echo "💡 DICA: Use 'termux-wake-lock' para evitar que o Termux durma"
 echo ""

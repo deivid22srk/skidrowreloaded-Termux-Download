@@ -15,11 +15,11 @@ def check_python():
     version = sys.version.split()[0]
     major, minor = sys.version_info[:2]
     
-    if major >= 3 and minor >= 8:
+    if major >= 3 and minor >= 10:
         print(f"   ✅ Python {version} - OK")
         return True
     else:
-        print(f"   ❌ Python {version} - Precisa Python 3.8+")
+        print(f"   ❌ Python {version} - Precisa Python 3.10+")
         return False
 
 def check_module(module_name, package_name=None):
@@ -50,9 +50,28 @@ def check_command(command):
     except:
         pass
     
-    print(f"   ⚠️  {command} - NÃO instalado (opcional)")
+    print(f"   ⚠️  {command} - NÃO instalado (necessário)")
     print(f"      Instale com: pkg install {command}")
     return False
+
+def check_transmission_daemon():
+    print("🔥 Verificando Transmission daemon...")
+    try:
+        result = subprocess.run(
+            ['pgrep', 'transmission'],
+            capture_output=True,
+            text=True
+        )
+        if result.returncode == 0 and result.stdout.strip():
+            print(f"   ✅ Transmission daemon rodando (PID: {result.stdout.strip()})")
+            return True
+        else:
+            print(f"   ⚠️  Transmission daemon NÃO está rodando")
+            print(f"      Inicie com: transmission-daemon")
+            return False
+    except:
+        print(f"   ❌ Erro ao verificar daemon")
+        return False
 
 def check_storage():
     print("📁 Verificando acesso ao armazenamento...")
@@ -73,23 +92,30 @@ def check_storage():
         print(f"      Execute: termux-setup-storage")
         return False
 
-def check_app_file():
-    print("📄 Verificando arquivo do aplicativo...")
+def check_bot_file():
+    print("📄 Verificando arquivo do bot...")
     
-    app_file = Path("skidrow_downloader.py")
+    bot_file = Path("telegram_bot.py")
     
-    if app_file.exists():
-        print(f"   ✅ skidrow_downloader.py encontrado")
+    if bot_file.exists():
+        print(f"   ✅ telegram_bot.py encontrado")
         
-        if app_file.stat().st_mode & 0o111:
+        # Verificar token
+        content = bot_file.read_text()
+        if 'BOT_TOKEN = "7718948467:' in content:
+            print(f"   ✅ Token do bot configurado")
+        else:
+            print(f"   ⚠️  Token pode estar incorreto")
+        
+        if bot_file.stat().st_mode & 0o111:
             print(f"   ✅ Permissão de execução OK")
         else:
             print(f"   ⚠️  Sem permissão de execução")
-            print(f"      Execute: chmod +x skidrow_downloader.py")
+            print(f"      Execute: chmod +x telegram_bot.py")
         
         return True
     else:
-        print(f"   ❌ skidrow_downloader.py NÃO encontrado")
+        print(f"   ❌ telegram_bot.py NÃO encontrado")
         return False
 
 def check_internet():
@@ -97,9 +123,9 @@ def check_internet():
     
     try:
         import requests
-        response = requests.get("https://www.google.com", timeout=5)
-        if response.status_code == 200:
-            print(f"   ✅ Conexão com internet OK")
+        response = requests.get("https://api.telegram.org", timeout=5)
+        if response.status_code in [200, 401, 404]:
+            print(f"   ✅ Conexão com Telegram API OK")
             return True
         else:
             print(f"   ⚠️  Conexão instável")
@@ -109,8 +135,8 @@ def check_internet():
         return False
 
 def main():
-    print_header("🎮 TESTE DE INSTALAÇÃO")
-    print("Verificando se tudo está pronto para usar o Skidrow Downloader...\n")
+    print_header("🤖 TESTE DE INSTALAÇÃO DO BOT")
+    print("Verificando se tudo está pronto para usar o Telegram Bot...\n")
     
     results = {
         "Python": check_python(),
@@ -118,19 +144,20 @@ def main():
     }
     
     print("\n📦 Verificando módulos Python necessários...")
-    results["textual"] = check_module("textual")
     results["requests"] = check_module("requests")
     results["bs4"] = check_module("bs4", "beautifulsoup4")
     results["lxml"] = check_module("lxml")
+    results["telegram"] = check_module("telegram", "python-telegram-bot")
     
-    print("\n🔧 Verificando ferramentas opcionais...")
+    print("\n🔧 Verificando ferramentas necessárias...")
     results["transmission"] = check_command("transmission-remote")
+    results["transmission_daemon"] = check_transmission_daemon()
     
     print()
     results["storage"] = check_storage()
     
     print()
-    results["app"] = check_app_file()
+    results["bot_file"] = check_bot_file()
     
     print_header("📊 RESULTADO")
     
@@ -145,11 +172,14 @@ def main():
     print("\n" + "="*50)
     
     if passed == total:
-        print("✅ TUDO OK! Você pode usar o aplicativo!")
+        print("🎉 TUDO OK! Você pode usar o bot!")
         print("\nPara executar:")
-        print("   python skidrow_downloader.py")
-        print("\nou:")
-        print("   ./skidrow_downloader.py")
+        print("   1. termux-wake-lock")
+        print("   2. python telegram_bot.py")
+        print("\nDepois:")
+        print("   3. Abrir Telegram")
+        print("   4. Buscar seu bot")
+        print("   5. Enviar /start")
     else:
         print("⚠️  ALGUMAS VERIFICAÇÕES FALHARAM")
         print("\nProblemas encontrados:")
@@ -163,17 +193,20 @@ def main():
         if not results.get("Python"):
             print("   • Atualize o Termux: pkg update && pkg upgrade")
         
-        if not any([results.get("textual"), results.get("requests"), 
-                   results.get("bs4"), results.get("lxml")]):
-            print("   • Instale dependências: pip install -r requirements.txt")
+        if not any([results.get("requests"), results.get("bs4"), 
+                   results.get("lxml"), results.get("telegram")]):
+            print("   • Instale dependências: pip install -r requirements_bot.txt")
         
         if not results.get("transmission"):
             print("   • Instale transmission: pkg install transmission")
         
+        if not results.get("transmission_daemon"):
+            print("   • Inicie daemon: transmission-daemon")
+        
         if not results.get("storage"):
             print("   • Configure storage: termux-setup-storage")
         
-        if not results.get("app"):
+        if not results.get("bot_file"):
             print("   • Certifique-se de estar no diretório correto")
         
         if not results.get("Internet"):
@@ -181,10 +214,9 @@ def main():
     
     print("="*50)
     print("\n📚 Para mais informações, leia:")
-    print("   • README.md - Instruções completas")
-    print("   • TERMUX_SETUP.md - Configuração do Termux")
+    print("   • README_BOT.md - Instruções completas")
     print("   • FAQ.md - Perguntas frequentes")
-    print("   • EXAMPLES.md - Exemplos de uso")
+    print("   • COMANDOS.md - Lista de comandos")
     print()
 
 if __name__ == "__main__":
